@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema({
+const userSchema = new Schema({
     username: {
         type: String,
         required: true
@@ -14,14 +14,14 @@ const UserSchema = new Schema({
     cart: {
         items: [
             {
-                productId: { type: Schema.Types.ObjectId, required: true },
+                productId: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
                 quantity: { type: Number, required: true }
             }
         ]
     },
 });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', userSchema);
 
 // const mongodb = require('mongodb');
 // const getDb = require('../util/database').getDb;
