@@ -10,9 +10,8 @@ const bodyParser = require('body-parser');
 const adminRoutes= require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const errorCtrl = require('./controllers/error');
-const mongoConnect = require('./util/database').mongoConnect;
 const User = require('./models/User');
-
+const mongoose = require('mongoose');
 
 
 const app = express();
@@ -37,6 +36,9 @@ app.use(shopRoutes);
 
 app.use(errorCtrl.get404);
 
-mongoConnect( () => {
-    app.listen(3000);
-});
+mongoose.connect('mongodb+srv://aessex_24:2s5j9Q61uPVA1BuG@cluster0-ochml.mongodb.net/shop?retryWrites=true', {useNewUrlParser: true})
+    .then(result => {
+        console.log('Connected!');
+        app.listen(3000);
+    })
+    .catch(err => console.log(err));
