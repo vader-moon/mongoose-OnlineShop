@@ -1,0 +1,30 @@
+{
+  "name": "mongoose-onlineshop",
+  "version": "1.0.0",
+  "description": "Udemy Course Online shop using mongoose",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aessex24/mongoose-OnlineShop.git"
+  },
+  "author": "Andrew Essex",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aessex24/mongoose-OnlineShop/issues"
+  },
+  "homepage": "https://github.com/aessex24/mongoose-OnlineShop#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "mongodb": "^3.1.13",
+    "mongoose": "^5.4.7"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}

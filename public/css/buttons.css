@@ -1,0 +1,70 @@
+.btn {
+    display: inline-block;
+    padding: 0.25rem 1rem;
+    text-decoration: none;
+    font: inherit;
+    font-size: 16px;
+    text-align: center;
+    border: 1px solid #00695c;
+    color: #00695c;
+    background: white;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .btn:hover,
+  .btn:active {
+    background-color: #00695c;
+    color: white;
+  }
+  
+  .btn.danger {
+    color: red;
+    border-color: red;
+  }
+  .btn.add {
+  
+  }
+  
+  .btn.edit:after {
+      content: '\f14b';
+      font-family: FontAwesome;
+      padding-left: 10px;
+  }
+  
+  .btn.danger:after {
+    content: '\f056';
+    font-family: FontAwesome;
+    padding-left: 10px;
+  
+  }
+  
+  .btn.order:after{
+    content: '\f0d6';
+    font-family: FontAwesome;
+    padding-left: 10px;
+  }
+  .btn.add:after {
+    content: '\f055';
+    font-family: FontAwesome;
+    padding-left: 10px;
+  
+  }
+  
+  .btn.info:after {
+    content: '\f05a';
+    font-family: FontAwesome;
+    padding-left: 10px;
+  }
+  .btn.cart:after {
+    content: '\f07a';
+    font-family: FontAwesome;
+    padding-left: 10px;
+  }
+  
+  .btn.danger:hover,
+  .btn.danger:active {
+    background: red;
+    color: white;
+  }

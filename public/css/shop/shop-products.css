@@ -1,0 +1,45 @@
+.card {
+    position: relative;
+    margin-right: 2px;
+    margin-bottom: 1em;
+    box-shadow: 10px 15px 10px rgba(0,0,0,0.5);
+    border-radius: 15px;
+    transition: 0.3s ease-out;
+}
+
+.card:hover {
+    transform: translateY(20px);
+    box-shadow: -10px -15px 17px rgba(0,0,0,0.5);
+
+}
+
+.card__image {
+  width: 100%;
+}
+
+.card__image img {
+    width: 100%;
+}
+
+.card__actions {
+  padding: 1rem;
+  text-align: center;
+}
+
+.form {
+    display: inline;
+}
+.btn {
+  display: inline-block;
+  padding: 0.25rem 1rem;
+  text-decoration: none;
+  font: inherit;
+  font-size: 16px;
+  text-align: center;
+  border: 1px solid #00695c;
+  color: #00695c;
+  background: white;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
