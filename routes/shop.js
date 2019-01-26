@@ -9,9 +9,9 @@ const shopCtrl = require('../controllers/shop');
 
 const router = express.Router();
 
-// router.get('/', shopCtrl.getIndex);
+router.get('/', shopCtrl.getIndex);
 
-// router.get('/products', shopCtrl.getProducts);
+router.get('/products', shopCtrl.getProducts);
 
 // router.get('/products/:productId', shopCtrl.getProduct);
 

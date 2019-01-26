@@ -21,9 +21,12 @@ exports.postAddProduct = (req, res, next) => {
     const price = req.body.price;
     const description = req.body.description;
     const imageUrl = req.body.imageUrl;
-    const userId = req.user._id;
-    console.log(`associated user id: ${userId}`);
-    const product = new Product(title, price, description, imageUrl, userId);
+    const product = new Product({
+        title:title,
+        price:price,
+        description:description,
+        imageUrl:imageUrl
+    });
     product.save()
     .then( (result) => {
         console.log('Product was created!!!');
