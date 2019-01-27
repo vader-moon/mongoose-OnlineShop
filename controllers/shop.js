@@ -40,12 +40,11 @@ exports.getCart = (req, res, next) => {
 
 exports.postCart = (req, res, next) => {
     const prodId = req.body.productId;
-    Product.fetchOne(prodId)
+    Product.findById(prodId)
     .then(product => {
         return req.user.addToCart(product);
     })
     .then(result => {
-        console.log(`Inserted Cart Count: ${result.modifiedCount}`);
         console.log('Item Added To Cart!');
         res.redirect('/cart');
     })

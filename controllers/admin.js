@@ -25,7 +25,8 @@ exports.postAddProduct = (req, res, next) => {
         title:title,
         price:price,
         description:description,
-        imageUrl:imageUrl
+        imageUrl:imageUrl,
+        userId: req.user._id
     });
     product.save()
     .then( (result) => {
@@ -38,6 +39,7 @@ exports.postAddProduct = (req, res, next) => {
 exports.getProducts = (req, res, next) => {
     Product.find()
     .then(products => {
+        console.log(products);
         res.render('admin/products', {
             prods: products,
             docTitle: 'Admin Products',
@@ -81,7 +83,7 @@ exports.postEditProduct = (req, res, next) => {
         title: title,
         price: price,
         imageUrl: imageUrl,
-        description: description
+        description: description,
     })
     .then(result => {
         console.log(`Product edited: ${result._id}`);
