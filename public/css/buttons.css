@@ -23,9 +23,6 @@
     color: red;
     border-color: red;
   }
-  .btn.add {
-  
-  }
   
   .btn.edit:after {
       content: '\f14b';

@@ -1,0 +1,11 @@
+.login-form {
+  width: 20rem;
+  max-width: 90%;
+  margin: auto;
+  display: block;
+}
+.btn.login:after {
+  content: '\f090';
+  font-family: FontAwesome;
+  padding-left: 10px;
+}

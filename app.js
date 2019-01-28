@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 // custom imports
 const adminRoutes= require('./routes/admin');
 const shopRoutes = require('./routes/shop');
+const authRoutes = require('./routes/auth');
 const errorCtrl = require('./controllers/error');
 const User = require('./models/User');
 const mongoose = require('mongoose');
@@ -33,7 +34,7 @@ app.use( (req, res, next) => {
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
-
+app.use(authRoutes);
 app.use(errorCtrl.get404);
 
 mongoose.connect('mongodb+srv://aessex_24:2s5j9Q61uPVA1BuG@cluster0-ochml.mongodb.net/shop?retryWrites=true', {useNewUrlParser: true})

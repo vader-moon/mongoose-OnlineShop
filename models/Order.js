@@ -18,4 +18,7 @@ const orderSchema = new Schema({
 
 });
 
+// orderSchema.methods.grandTotal = function() {
+
+// }
 module.exports = mongoose.model('Order', orderSchema);

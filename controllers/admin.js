@@ -12,7 +12,8 @@ exports.getAddProduct = (req, res, next) => {
     res.render('admin/edit-product', {
         docTitle: 'Add Product', 
         path: '/admin/add-product',
-        editing: false
+        editing: false,
+        isAuthenticated: req.isLoggedIn,
     }); // Allows to send a response and attach a body of type any.
 };
 
@@ -26,7 +27,7 @@ exports.postAddProduct = (req, res, next) => {
         price:price,
         description:description,
         imageUrl:imageUrl,
-        userId: req.user._id
+        userId: req.user._id,
     });
     product.save()
     .then( (result) => {
@@ -43,7 +44,8 @@ exports.getProducts = (req, res, next) => {
         res.render('admin/products', {
             prods: products,
             docTitle: 'Admin Products',
-            path: '/admin/products'
+            path: '/admin/products',
+            isAuthenticated: req.isLoggedIn,
         });
     })
     .catch( err => console.log(err.message));
@@ -66,7 +68,8 @@ exports.getEditProduct = (req, res, next) => {
             docTitle: 'Edit Product',
             path: '/admin/edit-product',
             editing: editMode,
-            product: product
+            product: product,
+            isAuthenticated: req.isLoggedIn,
         });
     })
     .catch(err => console.log(err.message));
