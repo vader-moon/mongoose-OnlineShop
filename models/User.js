@@ -20,7 +20,7 @@ const userSchema = new Schema({
                 productPrice: { type: Number, ref:'Product', required: true}
             }
         ],
-        cartTotal: { type: Number}
+        cartTotal: { type: Number, required: true }
     }
 });
 
