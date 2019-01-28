@@ -41,7 +41,7 @@ exports.getCart = (req, res, next) => {
                 path: '/cart',
                 products: products,
                 total: total,
-                isAuthenticated: isLoggedIn,
+                isAuthenticated: req.isLoggedIn,
             });
         })
         .catch( err => console.log(err));
@@ -79,7 +79,7 @@ exports.getIndex = (req, res, next) => {
                 prods: products,
                 docTitle: 'Shop',
                 path: '/',
-                isAuthenticated: isLoggedIn,
+                isAuthenticated: req.isLoggedIn,
             });
         })
         .catch( err => console.log(err.message));

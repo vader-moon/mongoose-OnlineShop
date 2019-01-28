@@ -4,6 +4,7 @@ const path = require('path');
 // 3rd party dependencies
 const express = require('express');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 //const expressHbs = require('express-handlebars');
 
 // custom imports
@@ -23,6 +24,9 @@ app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: false})); //registers middleware to parse incoming requests
 app.use(express.static(path.join(__dirname, 'public'))); //dynamically register css
+app.use(
+    session({secret: 'asdfdaslkjdijwfalkjdfssnlkd@##$355v/', resave: false, saveUninitialized: false})
+);
 app.use( (req, res, next) => {
     User.findById('5c4f374143a4f92e004d05e1')
     .then(user => {
