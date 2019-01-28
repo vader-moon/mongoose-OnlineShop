@@ -32,11 +32,13 @@ exports.getCart = (req, res, next) => {
         .populate('cart.items.productId')
         .execPopulate()
         .then( user => {
-            products = user.cart.items;
+            const products = user.cart.items;
+            const total = user.cart.cartTotal;
             res.render('shop/cart', {
                 docTitle: 'Your Cart',
                 path: '/cart',
                 products: products,
+                total: total,
             });
         })
         .catch( err => console.log(err));

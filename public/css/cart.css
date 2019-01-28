@@ -21,5 +21,14 @@
     font-size: 1.2rem;
     margin: 0;
   }
-  
+
+ .cart__total {
+  font-family: 'HelveticaNeue-Light';
+  font-size: x-large;
+  display: block;
+  width: 67%; 
+  text-align: right;
+  padding: 20px 0 10px 0; 
+} 
+ 
   

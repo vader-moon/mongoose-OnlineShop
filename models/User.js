@@ -25,7 +25,6 @@ const userSchema = new Schema({
 });
 
 userSchema.methods.addToCart = function (product) {
-    let cartTotal;
     const cartProductIndex = this.cart.items.findIndex(cp => {
         return cp.productId.toString() === product._id.toString();
     });
@@ -34,6 +33,8 @@ userSchema.methods.addToCart = function (product) {
     if(cartProductIndex >= 0) {
         newQuantity = this.cart.items[cartProductIndex].quantity + 1;
         updatedCartItems[cartProductIndex].quantity = newQuantity;
+        this.cart.items = updatedCartItems;
+        this.cart.cartTotal = this.calculateCart();
     }
     else {
         updatedCartItems.push({
@@ -41,10 +42,9 @@ userSchema.methods.addToCart = function (product) {
             productPrice: product.price,
             quantity: newQuantity,
         });
+        this.cart.items = updatedCartItems;
+        this.cart.cartTotal = this.calculateCart();
     }
-    cartTotal = this.calculateCart();
-    const updatedCart = {items: updatedCartItems, cartTotal: cartTotal };
-    this.cart = updatedCart;
 
     return this.save();
 
