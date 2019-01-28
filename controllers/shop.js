@@ -62,7 +62,7 @@ exports.postCartDeleteProduct = (req, res, next) => {
     const prodId = req.body.productId;
     req.user.deleteCartItem(prodId)
     .then(result => {
-        console.log(`Deleted Product: ${result.deletedCount}`);
+        console.log(result);
         res.redirect('/cart');
     })
     .catch(err => console.log(err.message));
@@ -98,9 +98,10 @@ exports.postOrder = (req, res, next) => {
         .populate('cart.items.productId')
         .execPopulate()
         .then(user => {
-            console.log('User products', user.cart.items);
+            const total = user.calculateCart();
             const products = user.cart.items.map(i => {
-                return {quantity: i.quantity, product: { ...i.productId._doc } };
+                console.log('inside this weird function');
+                return { quantity: i.quantity, product: { ...i.productId._doc } };
             });
             console.log('transformed products array', products);
             const order = new Order({
@@ -108,12 +109,14 @@ exports.postOrder = (req, res, next) => {
                     name: req.user.username,
                     userId: req.user._id,
                 },
-                products: products
+                products: products,
+                total: total,
             });
-
+            console.log('About to save order');
             return order.save();
         })
         .then(result => {
+            console.log('about to clear cart');
             return req.user.clearCart();
         })
         .then(() => {

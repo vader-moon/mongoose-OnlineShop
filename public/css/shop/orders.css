@@ -27,3 +27,9 @@
     border: 1px solid #00695c;
     color: #00695c;
 }
+
+.orders__total-price {
+    font-family: 'HelveticaNeue-Light';
+    float: right;
+    text-align: right;
+}
