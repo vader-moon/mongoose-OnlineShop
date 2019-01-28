@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Product = require('./Product');
 
 const Schema = mongoose.Schema;
 
@@ -15,19 +16,21 @@ const userSchema = new Schema({
         items: [
             {
                 productId: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
-                quantity: { type: Number, required: true }
+                quantity: { type: Number, required: true },
+                productPrice: { type: Number, ref:'Product', required: true}
             }
-        ]
-    },
+        ],
+        cartTotal: { type: Number}
+    }
 });
 
 userSchema.methods.addToCart = function (product) {
+    let cartTotal;
     const cartProductIndex = this.cart.items.findIndex(cp => {
         return cp.productId.toString() === product._id.toString();
     });
     let newQuantity = 1;
     const updatedCartItems = [...this.cart.items];
-
     if(cartProductIndex >= 0) {
         newQuantity = this.cart.items[cartProductIndex].quantity + 1;
         updatedCartItems[cartProductIndex].quantity = newQuantity;
@@ -35,19 +38,34 @@ userSchema.methods.addToCart = function (product) {
     else {
         updatedCartItems.push({
             productId: product._id,
-            quantity: newQuantity
+            productPrice: product.price,
+            quantity: newQuantity,
         });
     }
-
-    const updatedCart = {items: updatedCartItems };
-
+    cartTotal = this.calculateCart();
+    const updatedCart = {items: updatedCartItems, cartTotal: cartTotal };
     this.cart = updatedCart;
+
     return this.save();
 
 };
 
+userSchema.methods.calculateCart = function() {
+    let total = 0;
+    if(this.cart.items.length === 0) {
+        total = 0;
+    } else {
+        this.cart.items.forEach(element => {
+            let productTotal = element.productPrice * element.quantity;
+            total += productTotal;
+        });
+    }
+    return total;
+}
+
 userSchema.methods.deleteCartItem = function(productId) {
     let newQuantity;
+    let cartTotal;
     const updatedCartItems = [...this.cart.items];
 
     const productIndex = this.cart.items.findIndex(item => {
@@ -60,20 +78,23 @@ userSchema.methods.deleteCartItem = function(productId) {
             return item.productId.toString() !== productId.toString();
         });
 
-        this.cart.items = items;
-        return this.save();
+        cartTotal = this.calculateCart();
+        const cart = {items: items, cartTotal: cartTotal};
+        this.cart = cart;
 
     } else {
         newQuantity =  this.cart.items[productIndex].quantity - 1;
         updatedCartItems[productIndex].quantity = newQuantity;
-
-        this.cart.items = updatedCartItems;
-        return this.save();
+        cartTotal = this.calculateCart();
+        const cart = {items: updatedCartItems, cartTotal: cartTotal};
+        this.cart = cart;
     }
+    return this.save();
+    
 };
 
 userSchema.methods.clearCart = function() {
-    this.cart = { items: [] };
+    this.cart = { items: [], cartTotal: 0 };
     return this.save();
 
 };

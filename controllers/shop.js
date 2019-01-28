@@ -36,7 +36,7 @@ exports.getCart = (req, res, next) => {
             res.render('shop/cart', {
                 docTitle: 'Your Cart',
                 path: '/cart',
-                products: products
+                products: products,
             });
         })
         .catch( err => console.log(err));
@@ -49,7 +49,7 @@ exports.postCart = (req, res, next) => {
         return req.user.addToCart(product);
     })
     .then(result => {
-        console.log('Item Added To Cart!');
+        console.log(result);
         res.redirect('/cart');
     })
     .catch(err => console.log(err));
