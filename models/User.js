@@ -8,6 +8,12 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+
+    password: {
+        type: String,
+        required: true,
+    },
+
     email: {
         type: String,
         required: true
@@ -22,7 +28,7 @@ const userSchema = new Schema({
         ],
         cartTotal: { type: Number, required: true }
     }
-});
+})
 
 userSchema.methods.addToCart = function (product) {
     const cartProductIndex = this.cart.items.findIndex(cp => {

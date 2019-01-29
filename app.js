@@ -58,20 +58,6 @@ app.use(errorCtrl.get404);
 
 mongoose.connect(MONGODB_URI, {useNewUrlParser: true})
     .then(result => {
-        User.findOne()
-            .then(user => {
-                if(!user) {
-                    const user = new User({
-                        username: 'Andrew',
-                        email: 'andrew@test.com',
-                        cart: {
-                            items: []
-                        }
-                    });
-                    user.save();
-                }
-            })
-            .catch(err => console.log(err));
         app.listen(3000);
     })
     .catch(err => console.log(err));
