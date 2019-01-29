@@ -258,6 +258,12 @@ mobile-nav__item a,
 
 }
 
+.btn.signup:after {
+    content: '\f007';
+    font-family: FontAwesome;
+    padding-left: 10px;
+}
+
 .btn.order:after{
   content: '\f0d6';
   font-family: FontAwesome;
