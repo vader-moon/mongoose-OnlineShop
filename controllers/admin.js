@@ -3,12 +3,8 @@ const mongodb = require('mongodb');
 const Product = require('../models/Product');
 const User = require('../models/User');
 
-
-//const ObjectId = mongodb.ObjectId;
-
 exports.getAddProduct = (req, res, next) => {
     const editMode = req.query.edit;
-
     res.render('admin/edit-product', {
         docTitle: 'Add Product', 
         path: '/admin/add-product',
@@ -40,7 +36,6 @@ exports.postAddProduct = (req, res, next) => {
 exports.getProducts = (req, res, next) => {
     Product.find()
     .then(products => {
-        console.log(products);
         res.render('admin/products', {
             prods: products,
             docTitle: 'Admin Products',

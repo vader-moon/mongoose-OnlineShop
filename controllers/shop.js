@@ -18,7 +18,6 @@ exports.getProduct = (req, res, next) => {
     const prodId = req.params.productId;
     Product.findById(prodId)
         .then( (product) => {
-            console.log(product);
             res.render('shop/product-detail', {
                 docTitle: product.title,
                 product: product,
@@ -64,7 +63,6 @@ exports.postCartDeleteProduct = (req, res, next) => {
     const prodId = req.body.productId;
     req.user.deleteCartItem(prodId)
     .then(result => {
-        console.log(result);
         res.redirect('/cart');
     })
     .catch(err => console.log(err.message));
