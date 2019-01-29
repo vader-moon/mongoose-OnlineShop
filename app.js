@@ -5,6 +5,7 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 //const expressHbs = require('express-handlebars');
 
 // custom imports
@@ -14,9 +15,14 @@ const authRoutes = require('./routes/auth');
 const errorCtrl = require('./controllers/error');
 const User = require('./models/User');
 const mongoose = require('mongoose');
-
+const MONGODB_URI = 'mongodb+srv://aessex_24:2s5j9Q61uPVA1BuG@cluster0-ochml.mongodb.net/shop';
 
 const app = express();
+const store = new MongoDBStore({
+    uri: MONGODB_URI,
+    collection: 'sessions',
+
+});
 
 //app.engine('handlebars', expressHbs({layoutsDir: 'views/layouts/', defaultLayout: 'main-layout'}));
 app.set('view engine', 'ejs');
@@ -25,15 +31,24 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: false})); //registers middleware to parse incoming requests
 app.use(express.static(path.join(__dirname, 'public'))); //dynamically register css
 app.use(
-    session({secret: 'asdfdaslkjdijwfalkjdfssnlkd@##$355v/', resave: false, saveUninitialized: false})
-);
-app.use( (req, res, next) => {
-    User.findById('5c4f374143a4f92e004d05e1')
-    .then(user => {
-        req.user = user;
-        next();
+    session({
+        secret: 'asdfdaslkjdijwfalkjdfssnlkd@##$355v/',
+        resave: false,
+        saveUninitialized: false,
+        store: store
     })
-    .catch(err => console.log(err));
+);
+
+app.use((req,res, next) => {
+    if(!req.session.user) {
+        return next();
+    }
+    User.findById(req.session.user._id)
+        .then(user => {
+            req.user = user;
+            next();
+        })
+        .catch(err => console.log(err));
 });
 
 app.use('/admin', adminRoutes);
@@ -41,7 +56,7 @@ app.use(shopRoutes);
 app.use(authRoutes);
 app.use(errorCtrl.get404);
 
-mongoose.connect('mongodb+srv://aessex_24:2s5j9Q61uPVA1BuG@cluster0-ochml.mongodb.net/shop?retryWrites=true', {useNewUrlParser: true})
+mongoose.connect(MONGODB_URI, {useNewUrlParser: true})
     .then(result => {
         User.findOne()
             .then(user => {

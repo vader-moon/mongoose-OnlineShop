@@ -107,39 +107,46 @@ form {
   padding: 0;
 }
 
-.mobile-nav__item a {
-  text-decoration: none;
-  color: black;
-  font-size: 1.5rem;
-  padding: 0.5rem 2rem;
+mobile-nav__item a,
+.mobile-nav__item button {
+    font: inherit;
+    text-decoration: none;
+    color: black;
+    font-size: 1.5rem;
+    padding: 0.5rem 2rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
 }
 
 .mobile-nav__item a:active,
 .mobile-nav__item a:hover,
-.mobile-nav__item a.active {
-  background: #00695c;
-  color: white;
-  border-radius: 3px;
+.mobile-nav__item a.active,
+.mobile-nav__item button:hover,
+.mobile-nav__item button:active {
+    background: #00695c;
+    color: white;
+    border-radius: 3px;
 }
 
 #side-menu-toggle {
-  border: 1px solid white;
-  font: inherit;
-  padding: 0.5rem;
-  display: block;
-  background: transparent;
-  color: white;
-  cursor: pointer;
+    border: 1px solid white;
+    font: inherit;
+    padding: 0.5rem;
+    display: block;
+    background: transparent;
+    color: white;
+    cursor: pointer;
 }
 
 #side-menu-toggle:focus {
-  outline: none;
+    outline: none;
 }
 
 #side-menu-toggle:active,
 #side-menu-toggle:hover {
-  color: #ffeb3b;
-  border-color: #ffeb3b;
+    color: #ffeb3b;
+    border-color: #ffeb3b;
 }
 
 .backdrop {
