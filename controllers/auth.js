@@ -1,10 +1,19 @@
 const User = require('../models/User');
+
 exports.getLogin = (req, res, next) => {
   res.render('auth/login', {
       docTitle: 'Login', 
       path: '/login',
       isAuthenticated: false,
   }); // Allows to send a response and attach a body of type any.
+};
+
+exports.getSignup = (req, res, next) => {
+    res.render('auth/signup', {
+        path: '/signup',
+        docTitle: 'Signup',
+        isAuthenticated: false
+    });
 };
 
 exports.postLogin = (req, res, next) => {
@@ -19,6 +28,8 @@ exports.postLogin = (req, res, next) => {
         })
         .catch(err => console.log(err));
 };
+
+exports.postSignup = (req, res, next) => {};
 
 exports.postLogout = (req, res, next) => {
     req.session.destroy((err) => {
