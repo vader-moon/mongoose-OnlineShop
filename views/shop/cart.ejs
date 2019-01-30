@@ -14,10 +14,12 @@
                             <div class="cart__button-wrapper">
                                 <form action="/cart" method="POST">
                                     <input type="hidden" value="<%= p.productId._id %>" name="productId">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                     <button class="btn add" type="submit">Add</button>
                                 </form>
                                 <form action="/cart-delete-item" method="POST">
                                     <input type="hidden" value="<%= p.productId._id %>" name="productId">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                     <button class="btn danger" type="submit">Delete</button>
                                 </form>
                             </div>
@@ -28,6 +30,7 @@
                 <hr>
                 <div class="centered">
                     <form action="/create-order" method="POST">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <button type="submit" class="btn order">Order Now!</button>
                     </form>
                 </div>

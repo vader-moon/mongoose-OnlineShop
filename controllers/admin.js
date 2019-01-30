@@ -1,5 +1,3 @@
-const mongodb = require('mongodb');
-
 const Product = require('../models/Product');
 const User = require('../models/User');
 

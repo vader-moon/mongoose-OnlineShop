@@ -6,6 +6,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
+const csrf = require('csurf');
 //const expressHbs = require('express-handlebars');
 
 // custom imports
@@ -23,6 +24,7 @@ const store = new MongoDBStore({
     collection: 'sessions',
 
 });
+const csrfProtection = csrf();
 
 //app.engine('handlebars', expressHbs({layoutsDir: 'views/layouts/', defaultLayout: 'main-layout'}));
 app.set('view engine', 'ejs');
@@ -38,6 +40,7 @@ app.use(
         store: store
     })
 );
+app.use(csrfProtection);
 
 app.use((req,res, next) => {
     if(!req.session.user) {
@@ -49,6 +52,12 @@ app.use((req,res, next) => {
             next();
         })
         .catch(err => console.log(err));
+});
+
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    res.locals.csrfToken = req.csrfToken();
+    next();
 });
 
 app.use('/admin', adminRoutes);
