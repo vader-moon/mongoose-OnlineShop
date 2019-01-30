@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
+@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+
 
 * {
   box-sizing: border-box;
@@ -307,7 +309,7 @@ mobile-nav__item a,
 
 .user-message {
     margin: auto;
-    width: 40%;
+    width: 90%;
     border: 1px solid #106dff;
     padding: 0.5rem;
     border-radius: 3px;
@@ -315,10 +317,26 @@ mobile-nav__item a,
     text-align: center;
 }
 
-.user-message--error {
+.user-message.success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+}
+
+.user-message.error {
     border-color: red;
-    background: rgb(255, 176, 176);
-    color: red;
+    color: #D8000C;
+    background-color: #FFD2D2;
+}
+
+.user-message.success i {
+    margin:10px 22px;
+    font-size:1.5em;
+    vertical-align:middle;
+}
+.user-message.error i {
+    margin:10px 22px;
+    font-size:1.5em;
+    vertical-align:middle;
 }
 
 @media (min-width: 768px) {
@@ -330,6 +348,6 @@ mobile-nav__item a,
     display: none;
   }
   .user-message {
-    width: 30rem;
+    width: 24rem;
   }
 }
