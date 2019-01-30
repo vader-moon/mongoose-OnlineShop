@@ -18,4 +18,8 @@ router.post('/login', authCtrl.postLogin);
 
 router.post('/logout', authCtrl.postLogout);
 
+router.get('/reset', authCtrl.getReset);
+
+// router.post('/reset-password', authCtrl.postReset);
+
 module.exports = router;

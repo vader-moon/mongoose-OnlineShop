@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
-@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 
 
 * {
@@ -295,6 +295,13 @@ mobile-nav__item a,
   font-family: FontAwesome;
   padding-left: 10px;
 }
+
+.btn.reset:after {
+    content: '\f09c';
+    font-family: FontAwesome;
+    padding-left: 10px;
+}
+
 .btn.cart:after {
   content: '\f07a';
   font-family: FontAwesome;
