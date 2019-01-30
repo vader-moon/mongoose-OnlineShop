@@ -105,7 +105,8 @@ exports.postOrder = (req, res, next) => {
             });
             const order = new Order({
                 user: {
-                    name: req.user.username,
+                    email: req.user.email,
+                    username: req.user.username,
                     userId: req.user._id,
                 },
                 products: products,
