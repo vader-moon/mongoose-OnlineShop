@@ -2,17 +2,24 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
 exports.getLogin = (req, res, next) => {
-  let message = req.flash('error');
-  if(message.length > 0) {
-      message = message[0];
+  let errorMessage, success;
+  const error = req.flash('error');
+  const signupSuccess = req.flash('signup-success');
+
+  if(error.length > 0) {
+      errorMessage = error[0];
+  } else if( signupSuccess.length > 0) {
+      success = signupSuccess[0];
   }
   else {
-      message = null
+      errorMessage = null;
+      success = null;
   }
   res.render('auth/login', {
       docTitle: 'Login', 
       path: '/login',
-      errorMessage: message,
+      errorMessage: errorMessage,
+      successMessage: success,
 
   }); // Allows to send a response and attach a body of type any.
 };
@@ -48,6 +55,7 @@ exports.postLogin = (req, res, next) => {
                         req.session.user = user;
                         return req.session.save(err => {
                             console.log('error is:', err);
+                            req.flash('login-success', 'Login Successful');
                             return res.redirect('/')
                         });
                     }
@@ -55,6 +63,7 @@ exports.postLogin = (req, res, next) => {
                     res.redirect('/login')
                 })
                 .catch(err => {
+                    req.flash('error', 'Invalid Email or Password');
                     console.log(err);
                     res.redirect('/login');
                 });
@@ -85,6 +94,7 @@ exports.postSignup = (req, res, next) => {
                     return user.save();
                 })
                 .then(result => {
+                    req.flash('signup-success', 'SignUp Successful');
                     res.redirect('/login');
                 })
         })

@@ -67,12 +67,20 @@ exports.postCartDeleteProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
+    let message;
+    const login = req.flash('login-success');
+    if(login.length > 0) {
+        message = login[0];
+    } else {
+        message = null;
+    }
     Product.find()
         .then( products => {
             res.render('shop/index', { 
                 prods: products,
                 docTitle: 'Shop',
                 path: '/',
+                message: message,
             });
         })
         .catch( err => console.log(err.message));

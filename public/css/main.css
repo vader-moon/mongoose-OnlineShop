@@ -311,13 +311,13 @@ mobile-nav__item a,
     margin: auto;
     width: 90%;
     border: 1px solid #106dff;
-    padding: 0.5rem;
     border-radius: 3px;
     background: #b9c9ff;
     text-align: center;
 }
 
 .user-message.success {
+    border: 1px solid #4F8A10;
     color: #4F8A10;
     background-color: #DFF2BF;
 }

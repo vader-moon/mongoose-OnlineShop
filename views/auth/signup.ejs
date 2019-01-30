@@ -8,7 +8,10 @@
 
 <main>
     <%if (errorMessage) {%>
-        <div class="user-message user-message--error"> <%= errorMessage %></div>
+        <div class="user-message error">
+            <i class="fa fa-exclamation-circle"></i>
+            <%= errorMessage %>
+        </div>
     <% } %>
     <form class="login-form" action="/signup" method="POST">
         <div class="form-control">

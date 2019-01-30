@@ -14,6 +14,11 @@
                 <i class="fa fa-exclamation-circle"></i>
                     <%= errorMessage %>
             </div>
+        <% } else if(successMessage) { %>
+            <div class="user-message success">
+                <i class="fa fa-check-circle-o"></i>
+                <%= successMessage %>
+            </div>
         <% } %>
         <form class="login-form" action="/login" method="POST">
             <div class="form-control">
