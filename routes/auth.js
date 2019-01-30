@@ -26,4 +26,6 @@ router.get('/reset/:token', authCtrl.getNewPassword);
 
 router.post('/new-password', authCtrl.postNewPassword);
 
+router.get('/sent-email/:id', authCtrl.getEmailAwait);
+
 module.exports = router;

@@ -144,6 +144,7 @@ exports.getReset = (req, res, next) => {
 };
 
 exports.postReset = (req, res, next) => {
+    let user;
     crypto.randomBytes(32, (err, buffer) => {
         if(err) {
             console.log(err);
@@ -153,17 +154,17 @@ exports.postReset = (req, res, next) => {
         const token = buffer.toString('hex');
 
         User.findOne({email: req.body.email})
-            .then(user => {
-                if(!user){
+            .then(foundUser => {
+                if(!foundUser){
                     req.flash('error', 'Email does not exist');
                     res.redirect('/reset');
                 }
+                user = foundUser;
                 user.resetToken = token;
                 user.resetTokenExpiration = Date.now() + 3600000;
                 return user.save();
             })
             .then(result => {
-                res.redirect('/');
                 transporter.sendMail({
                     to: req.body.email,
                     from: 'shop@node-complete.com',
@@ -176,6 +177,8 @@ exports.postReset = (req, res, next) => {
                     .then(result => {
                         console.log(`email is on its way to ${req.body.email}`);
                         console.log(result);
+                        req.flash('email-sent', 'Email Sent!');
+                        res.redirect(`/sent-email/${user._id}`);
                     })
                     .catch(err => console.log(err));
 
@@ -236,3 +239,24 @@ exports.postNewPassword = (req, res, next) => {
     })
     .catch(err => console.log(err));
 };
+
+exports.getEmailAwait = (req, res, next) => {
+    const userId = req.params.id;
+    let email;
+    let message = req.flash('email-sent');
+    if(message.length > 0) {
+        message = message[0];
+    } else {
+        message = null;
+    }
+    User.findById(userId)
+    .then(user => {
+        res.render('auth/sent-email' , {
+            path: '/sent-email',
+            docTitle:'Email Sent',
+            successMessage: message,
+            emailAddress: user.email,
+        });
+    })
+    .catch(err => console.log(err));
+}
