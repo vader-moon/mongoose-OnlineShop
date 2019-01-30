@@ -15,11 +15,14 @@ exports.getLogin = (req, res, next) => {
   let errorMessage, success;
   const error = req.flash('error');
   const signupSuccess = req.flash('signup-success');
+  const updatedPasswordSuccess = req.flash('update-password-success');
 
   if(error.length > 0) {
       errorMessage = error[0];
   } else if( signupSuccess.length > 0) {
       success = signupSuccess[0];
+  } else if(updatedPasswordSuccess.length > 0){
+      success = updatedPasswordSuccess[0];  
   }
   else {
       errorMessage = null;
@@ -212,13 +215,24 @@ exports.postNewPassword = (req, res, next) => {
     })
     .then(hashedPassword => {
         resetUser.password = hashedPassword;
-        resetUser.token = undefined;
+        resetUser.resetToken = undefined;
         resetUser.resetTokenExpiration = undefined;
         return resetUser.save();
     })
     .then(result => {
-        req.flash('Password-success', 'Password Update Successful');
+        req.flash('update-password-success', 'Password Update Successful');
         res.redirect('/login');
+        transporter.sendMail({
+            to: resetUser.email,
+            from: 'shop@node-complete.com',
+            subject: 'Password reset',
+            html: '<p>Your password was reset!</p>',
+        })
+        .then(result => {
+            console.log(`email is on its way to ${resetUser.email}`);
+            console.log(result);
+        })
+        .catch(err => console.log(err));
     })
     .catch(err => console.log(err));
 };
