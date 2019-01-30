@@ -67,12 +67,20 @@ exports.postCartDeleteProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-    let message;
+    let message, errorMessage;
     const login = req.flash('login-success');
+    const edit = req.flash('permission-denied');
+    const deletion = req.flash('delete-denied');
     if(login.length > 0) {
         message = login[0];
-    } else {
+    } else if(edit.length > 0) {
+        errorMessage = edit[0];
+    } else if(deletion.length > 0) {
+        errorMessage = deletion[0];
+    }
+    else {
         message = null;
+        errorMessage = null;
     }
     Product.find()
         .then( products => {
@@ -81,6 +89,7 @@ exports.getIndex = (req, res, next) => {
                 docTitle: 'Shop',
                 path: '/',
                 message: message,
+                errorMessage: errorMessage,
             });
         })
         .catch( err => console.log(err.message));

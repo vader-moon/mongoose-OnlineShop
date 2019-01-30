@@ -13,6 +13,11 @@
             <i class="fa fa-check-circle-o"></i>
             <%= message %>
         </div>
+    <% } else if(errorMessage) { %>
+        <div class="user-message error">
+                <i class="fa fa-exclamation-circle"></i>
+                <%= errorMessage %>
+            </div>
     <% } %>
     <% if (prods.length > 0) { %>
     <div class="grid">

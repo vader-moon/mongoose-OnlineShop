@@ -24,6 +24,7 @@ exports.postAddProduct = (req, res, next) => {
     });
     product.save()
     .then( (result) => {
+        req.flash('add-success', "Product added SuccessFully");
         console.log('Product was created!!!');
         res.redirect('/admin/products');
     })
@@ -31,12 +32,27 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
+    let message;
+    const editSuccess = req.flash('edit-success');
+    const deleteSuccess = req.flash('delete-success');
+    const addSuccess = req.flash('add-success');
+    if(editSuccess.length > 0) {
+        message = editSuccess[0];
+    } else if (deleteSuccess.length > 0) {
+        message = deleteSuccess[0];
+    } else if(addSuccess.length > 0) {
+        message = addSuccess[0];
+    }
+    else {
+        message = null;
+    }
     Product.find({userId: req.user._id})
     .then(products => {
         res.render('admin/products', {
             prods: products,
             docTitle: 'Admin Products',
             path: '/admin/products',
+            message: message,
         });
     })
     .catch( err => console.log(err.message));
@@ -71,16 +87,22 @@ exports.postEditProduct = (req, res, next) => {
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
     const prodId = req.body.productId;
-    Product.findByIdAndUpdate(prodId,
-    {
-        title: title,
-        price: price,
-        imageUrl: imageUrl,
-        description: description,
-    })
-    .then(result => {
-        console.log(`Product edited: ${result._id}`);
-        res.redirect('/admin/products');
+    Product.findById(prodId)
+    .then(product => {
+        if(product.userId.toString() !== req.user._id.toString()) {
+            req.flash('permission-denied', 'Edit Permission Denied');
+            return res.redirect('/');
+        }
+        product.title = title;
+        product.price = price;
+        product.imageUrl = imageUrl;
+        product.description = description;
+        product.save()
+        .then(result => {
+            req.flash('edit-success', 'Product Edited Successfully');
+            console.log(`Product edited: ${result._id}`);
+            res.redirect('/admin/products');
+        });
     })
     .catch(err => console.log(err));
 
@@ -88,11 +110,16 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
     const prodId = req.body.productId;
-    Product.findByIdAndDelete(prodId)
+    Product.deleteOne({_id: prodId, userId: req.user._id})
     .then(result => {
-        console.log('DESTROYED PRODUCT');
-        res.redirect('/admin/products');
-
+        if(result.deletedCount === 0) {
+            req.flash('delete-denied', 'Delete Permission Denied');
+            res.redirect('/');
+        } else {
+            req.flash('delete-success', 'Product Deleted Successfully');
+            console.log('DESTROYED PRODUCT');
+            res.redirect('/admin/products');
+        }
     })
     .catch( err => console.log(err));
 };

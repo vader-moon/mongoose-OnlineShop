@@ -8,6 +8,12 @@
         <%- include('../includes/navigation.ejs') %>
 
             <main>
+                <% if(message) { %>
+                    <div class="user-message success">
+                        <i class="fa fa-check-circle-o"></i>
+                        <%= message %>
+                    </div>
+                <% } %>
                 <% if (prods.length > 0) { %>
                     <div class="grid">
                         <% for (let product of prods) { %>
