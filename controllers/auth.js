@@ -34,6 +34,7 @@ exports.getLogin = (req, res, next) => {
       path: '/login',
       errorMessage: errorMessage,
       successMessage: success,
+      oldInput: { email: "", password: "" },
 
   }); // Allows to send a response and attach a body of type any.
 };
@@ -49,6 +50,7 @@ exports.getSignup = (req, res, next) => {
         path: '/signup',
         docTitle: 'Signup',
         errorMessage: message,
+        oldInput: { email: "", password: "", confirmPassword: "" },
     });
 };
 
@@ -61,7 +63,8 @@ exports.postLogin = (req, res, next) => {
         return res.status(422).render('auth/login', {
             docTitle: 'Login', 
             path: '/login',
-            errorMessage: errors.array()[0].msg,      
+            errorMessage: errors.array()[0].msg,
+            oldInput: { email: email, password: password }      
         }); 
     }
     User.findOne({email: email})
@@ -106,6 +109,7 @@ exports.postSignup = (req, res, next) => {
             path: '/signup',
             docTitle: 'Signup',
             errorMessage: errors.array()[0].msg,
+            oldInput: { email: email, password: password, confirmPassword: req.body.confirmPassword },
         });
     }
 
