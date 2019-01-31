@@ -16,11 +16,13 @@ router.post('/login',
 [
   check('email')
   .isEmail()
-  .withMessage('Email is not valid'),
+  .withMessage('Email is not valid')
+  .normalizeEmail(),
 
   check('password')
   .isLength( {min: 8} )
-  .withMessage('Password must be 8 characters long'),
+  .withMessage('Password must be 8 characters long')
+  .trim(),
 ]
 ,authCtrl.postLogin);
 
@@ -30,7 +32,8 @@ router.post('/signup',
 [
     check('username')
     .isAlphanumeric()
-    .withMessage('Required and special charaters are not allowed'),
+    .withMessage('Required and special charaters are not allowed')
+    .trim(),
 
     check('email')
     .isEmail().withMessage('Please Enter A valid email')
@@ -40,7 +43,8 @@ router.post('/signup',
               return Promise.reject('Email already exists');
           };
       });
-    }),
+    })
+    .normalizeEmail(),
 
     check('password', 'Please enter a password at least 8 characters long')
     .isLength({ min: 8, max: undefined }),
@@ -51,6 +55,7 @@ router.post('/signup',
       } 
       return true;
     })
+    .trim(),
 ], 
 authCtrl.postSignup);
 

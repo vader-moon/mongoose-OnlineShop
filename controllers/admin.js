@@ -1,12 +1,15 @@
 const Product = require('../models/Product');
 const User = require('../models/User');
+const { validationResult } = require('express-validator/check');
 
 exports.getAddProduct = (req, res, next) => {
-    const editMode = req.query.edit;
     res.render('admin/edit-product', {
         docTitle: 'Add Product', 
         path: '/admin/add-product',
         editing: false,
+        hasError: false,
+        errorMessage: null,
+
     }); // Allows to send a response and attach a body of type any.
 };
 
@@ -15,6 +18,23 @@ exports.postAddProduct = (req, res, next) => {
     const price = req.body.price;
     const description = req.body.description;
     const imageUrl = req.body.imageUrl;
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        console.log(errors.array());
+        return res.status(422).render('admin/edit-product', {
+            docTitle: 'Add Product', 
+            path: '/admin/add-product',
+            editing: false,
+            hasError: true,
+            product: {
+                title: title,
+                imageUrl: imageUrl,
+                price: price, 
+                description: description
+            },
+            errorMessage: errors.array()[0].msg,
+        });
+    }
     const product = new Product({
         title:title,
         price:price,
@@ -76,6 +96,8 @@ exports.getEditProduct = (req, res, next) => {
             path: '/admin/edit-product',
             editing: editMode,
             product: product,
+            hasError: false,
+            errorMessage: null,
         });
     })
     .catch(err => console.log(err.message));
@@ -87,6 +109,24 @@ exports.postEditProduct = (req, res, next) => {
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
     const prodId = req.body.productId;
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        console.log(errors.array());
+        return res.status(422).render('admin/edit-product', {
+            docTitle: 'Edit Product', 
+            path: '/admin/edit-product',
+            editing: true,
+            hasError: true,
+            product: {
+                title: title,
+                imageUrl: imageUrl,
+                price: price, 
+                description: description,
+                _id: prodId,
+            },
+            errorMessage: errors.array()[0].msg,
+        });
+    }
     Product.findById(prodId)
     .then(product => {
         if(product.userId.toString() !== req.user._id.toString()) {

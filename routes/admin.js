@@ -3,6 +3,8 @@ const path  = require('path');
 
 // 3rd Party Modules
 const express = require('express');
+const { check, body } = require('express-validator/check');
+
 
 // Custom imports
 const adminCtrl = require('../controllers/admin');
@@ -17,11 +19,45 @@ router.get('/products', isAuth, adminCtrl.getProducts);
 router.get('/add-product', isAuth, adminCtrl.getAddProduct);
 
 // implicitly this route is reached under /admin/add-product => POST
-router.post('/add-product', isAuth, adminCtrl.postAddProduct);
+router.post('/add-product', isAuth, 
+[
+  check('title')
+  .isString()
+  .isLength({min: 3})
+  .trim(),
+
+  check('imageUrl')
+  .isURL(),
+
+  check('price')
+  .isFloat(),
+
+  check('description')
+  .isLength({min: 5, max: 300})
+  .trim()
+]
+,adminCtrl.postAddProduct);
 
 router.get('/edit-product/:productId', isAuth, adminCtrl.getEditProduct);
 
-router.post('/edit-product', isAuth, adminCtrl.postEditProduct);
+router.post('/edit-product', isAuth, 
+  [
+    check('title')
+    .isString()
+    .isLength({min: 3})
+    .trim(),
+
+    check('imageUrl')
+    .isURL(),
+
+    check('price')
+    .isFloat(),
+
+    check('description')
+    .isLength({min: 5, max: 300})
+    .trim()
+  ], 
+adminCtrl.postEditProduct);
 
 router.post('/delete-product', isAuth, adminCtrl.postDeleteProduct);
 
