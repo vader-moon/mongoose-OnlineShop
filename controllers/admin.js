@@ -1,7 +1,5 @@
 const Product = require('../models/Product');
-const User = require('../models/User');
 const { validationResult } = require('express-validator/check');
-const mongoose = require('mongoose');
 
 exports.getAddProduct = (req, res, next) => {
     res.render('admin/edit-product', {
@@ -37,7 +35,6 @@ exports.postAddProduct = (req, res, next) => {
         });
     }
     const product = new Product({
-        _id: new mongoose.Types.ObjectId("5c5323e4757c724f8ca59640"),
         title:title,
         price:price,
         description:description,
@@ -51,20 +48,9 @@ exports.postAddProduct = (req, res, next) => {
         res.redirect('/admin/products');
     })
     .catch( err => {
-        // return res.status(500).render('admin/edit-product', {
-        //     docTitle: 'Add Product', 
-        //     path: '/admin/add-product',
-        //     editing: false,
-        //     hasError: true,
-        //     product: {
-        //         title: title,
-        //         imageUrl: imageUrl,
-        //         price: price, 
-        //         description: description
-        //     },
-        //     errorMessage: 'Databse Operation Failed, please try again',
-        // });
-        res.redirect('/500');
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
     });    
 };
 
@@ -92,7 +78,11 @@ exports.getProducts = (req, res, next) => {
             message: message,
         });
     })
-    .catch( err => console.log(err.message));
+    .catch( err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+    });
 };
 
 exports.getEditProduct = (req, res, next) => {
@@ -101,8 +91,6 @@ exports.getEditProduct = (req, res, next) => {
         return res.redirect('/');
     }
     const prodId = req.params.productId;
-    console.log(`product id: ${prodId}`);
-    console.log(`editing mode: ${editMode}`);
     Product.findById(prodId)
     .then(product => {
         if(!product) {
@@ -117,7 +105,11 @@ exports.getEditProduct = (req, res, next) => {
             errorMessage: null,
         });
     })
-    .catch(err => console.log(err.message));
+    .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+    });
 };
 
 exports.postEditProduct = (req, res, next) => {
@@ -157,11 +149,14 @@ exports.postEditProduct = (req, res, next) => {
         product.save()
         .then(result => {
             req.flash('edit-success', 'Product Edited Successfully');
-            console.log(`Product edited: ${result._id}`);
             res.redirect('/admin/products');
         });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+    });
 
 };
 
@@ -174,9 +169,12 @@ exports.postDeleteProduct = (req, res, next) => {
             res.redirect('/');
         } else {
             req.flash('delete-success', 'Product Deleted Successfully');
-            console.log('DESTROYED PRODUCT');
             res.redirect('/admin/products');
         }
     })
-    .catch( err => console.log(err));
+    .catch( err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+    });
 };
