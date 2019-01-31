@@ -5,13 +5,24 @@ const express = require('express');
 const { check, body } = require('express-validator/check');
 
 // Custom Modules
-authCtrl = require('../controllers/auth');
+const authCtrl = require('../controllers/auth');
+const User = require('../models/User');
 
 const router = express.Router();
 
 router.get('/login', authCtrl.getLogin);
 
-router.post('/login', authCtrl.postLogin);
+router.post('/login', 
+[
+  check('email')
+  .isEmail()
+  .withMessage('Email is not valid'),
+
+  check('password')
+  .isLength( {min: 8} )
+  .withMessage('Password must be 8 characters long'),
+]
+,authCtrl.postLogin);
 
 router.get('/signup', authCtrl.getSignup);
 
@@ -22,7 +33,14 @@ router.post('/signup',
     .withMessage('Required and special charaters are not allowed'),
 
     check('email')
-    .isEmail().withMessage('Please Enter A valid email'),
+    .isEmail().withMessage('Please Enter A valid email')
+    .custom((value, { req }) => {
+      return User.findOne({email: value}).then(userDoc => {
+          if(userDoc){
+              return Promise.reject('Email already exists');
+          };
+      });
+    }),
 
     check('password', 'Please enter a password at least 8 characters long')
     .isLength({ min: 8, max: undefined }),
