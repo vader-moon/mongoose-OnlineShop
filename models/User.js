@@ -70,7 +70,7 @@ userSchema.methods.calculateCart = function() {
             total += productTotal;
         });
     }
-    return total;
+    return Math.trunc(total * 100) / 100;
 }
 
 userSchema.methods.deleteCartItem = function(productId) {
