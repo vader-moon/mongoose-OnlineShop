@@ -2,8 +2,12 @@
 const fs = require('fs');
 const path = require('path');
 
+// custom modules
 const Product = require('../models/Product');
 const Order = require('../models/Order');
+
+//third part modules
+const pdf = require('pdfkit');
 
 exports.getProducts = (req, res, next) => {
     Product.find()
