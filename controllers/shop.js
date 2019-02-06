@@ -193,10 +193,8 @@ exports.getInvoice = (req, res, next) => {
         res.setHeader('Content-Disposition', 'inline; filename=" '+ invoiceName +' "');
         pdfDoc.pipe(fs.createWriteStream(invoicePath));
         pdfDoc.pipe(res);
-        pdfDoc.fontSize(26).text('Invoice', {
-            underline: true
-        });
-        pdfDoc.text('------------------------------------------------------', { width: 1000});
+        pdfDoc.fontSize(26).text(`Invoice - #${order._id}`);
+        pdfDoc.text('----------------------------------------------------------', { width: 1000});
         pdfDoc.fontSize(16);
         let count = 0;
         order.products.forEach(prod => {
