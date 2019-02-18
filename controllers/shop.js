@@ -9,20 +9,34 @@ const Order = require('../models/Order');
 //third part modules
 const PDFDocument = require('pdfkit');
 
+const ITEMS_PER_PAGE = 4;
+
 exports.getProducts = (req, res, next) => {
-    Product.find()
-        .then( products => {
-            res.render('shop/product-list', { 
-                prods: products,
-                docTitle: 'All Products',
-                path: '/products' ,
-            });
-        })
-        .catch( err => {
-            const error = new Error(err);
-            error.httpStatusCode = 500;
-            return next(error);
+    const page = +req.query.page || 1;
+    let totalItems;
+    Product.find().countDocuments()
+    .then(numDocs => {
+        totalItems = numDocs;
+        return Product.find().skip((page -1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE);
+    }) 
+    .then( products => {
+        res.render('shop/product-list', { 
+            prods: products,
+            docTitle: 'All Products',
+            path: '/products',
+            currentPage: page,
+            hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+            hasPreviousPage: page > 1,
+            nextPage: page + 1,
+            previousPage: page - 1,
+            lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
         });
+    })
+    .catch( err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+    });
 };
 
 exports.getProduct = (req, res, next) => {
@@ -95,6 +109,9 @@ exports.postCartDeleteProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
+    const page = +req.query.page || 1;
+    let totalItems;
+    console.log(`Page number:${page}`);
     let message, errorMessage;
     const login = req.flash('login-success');
     const edit = req.flash('permission-denied');
@@ -110,21 +127,31 @@ exports.getIndex = (req, res, next) => {
         message = null;
         errorMessage = null;
     }
-    Product.find()
-        .then( products => {
-            res.render('shop/index', { 
-                prods: products,
-                docTitle: 'Shop',
-                path: '/',
-                message: message,
-                errorMessage: errorMessage,
-            });
-        })
-        .catch( err => {
-            const error = new Error(err);
-            error.httpStatusCode = 500;
-            return next(error);
+    Product.find().countDocuments()
+    .then(numDocs => {
+        totalItems = numDocs;
+        return Product.find().skip((page -1) * ITEMS_PER_PAGE).limit(ITEMS_PER_PAGE);
+    }) 
+    .then( products => {
+        res.render('shop/index', { 
+            prods: products,
+            docTitle: 'Shop',
+            path: '/',
+            message: message,
+            errorMessage: errorMessage,
+            currentPage: page,
+            hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+            hasPreviousPage: page > 1,
+            nextPage: page + 1,
+            previousPage: page - 1,
+            lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
         });
+    })
+    .catch( err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+    });
 };
 
 exports.getOrders = (req, res, next) => {
