@@ -170,12 +170,43 @@ exports.getOrders = (req, res, next) => {
         });
 };
 
+exports.getCheckout = (req, res, next) => {
+    req.user
+        .populate('cart.items.productId')
+        .execPopulate()
+        .then( user => {
+            const products = user.cart.items;
+            const total = user.cart.cartTotal;
+            res.render('shop/checkout', {
+                docTitle: 'Checkout',
+                path: '/checkout',
+                products: products,
+                total: total,
+            });
+        })
+        .catch( err => {
+            console.log(err);
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
+};
+
 exports.postOrder = (req, res, next) => {
+    // Set your secret key: remember to change this to your live secret key in production
+    // See your keys here: https://dashboard.stripe.com/account/apikeys
+    const stripe = require("stripe")("sk_test_IJ9xYeE67TuEZlYHWRPqZhHo");
+
+    // Token is created using Checkout or Elements!
+    // Get the payment token ID submitted by the form:
+    const token = req.body.stripeToken; // Using Express
+    let cartTotal;
     req.user
         .populate('cart.items.productId')
         .execPopulate()
         .then(user => {
             const total = user.calculateCart();
+            cartTotal = total;
             const products = user.cart.items.map(i => {
                 return { quantity: i.quantity, product: { ...i.productId._doc } };
             });
@@ -191,6 +222,15 @@ exports.postOrder = (req, res, next) => {
             return order.save();
         })
         .then(result => {
+            (async () => {
+                const charge = await stripe.charges.create({
+                    amount: cartTotal * 100,
+                    currency: 'usd',
+                    description: 'Example charge',
+                    source: token,
+                    metadata: { order_id: result._id.toString(), user_email: result.user.email }
+                });
+                })();
             return req.user.clearCart();
         })
         .then(() => {
@@ -250,12 +290,7 @@ exports.getInvoice = (req, res, next) => {
     });
 };
 
-// exports.getCheckout = (req, res, next) => {
-//     res.render('shop/checkout', {
-//         docTitle: 'Checkout',
-//         path: '/checkout'
-//     })
-// }
+
 
 
 
