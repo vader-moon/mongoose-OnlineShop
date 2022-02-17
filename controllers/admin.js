@@ -5,7 +5,7 @@ const { validationResult } = require('express-validator/check');
 
 exports.getAddProduct = (req, res, next) => {
     res.render('admin/edit-product', {
-        docTitle: 'Add Product', 
+        docTitle: 'Add Product',
         path: '/admin/add-product',
         editing: false,
         hasError: false,
@@ -21,29 +21,30 @@ exports.postAddProduct = (req, res, next) => {
     const image = req.file;
     if(!image) {
         return res.status(422).render('admin/edit-product', {
-            docTitle: 'Add Product', 
+            docTitle: 'Add Product',
             path: '/admin/add-product',
             editing: false,
             hasError: true,
             product: {
                 title: title,
-                price: price, 
+                price: price,
                 description: description
             },
             errorMessage: 'Attatched file is not an image',
         });
     }
+    console.log('jay is sexy');
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         console.log(errors.array());
         return res.status(422).render('admin/edit-product', {
-            docTitle: 'Add Product', 
+            docTitle: 'Add Product',
             path: '/admin/add-product',
             editing: false,
             hasError: true,
             product: {
                 title: title,
-                price: price, 
+                price: price,
                 description: description
             },
             errorMessage: errors.array()[0].msg,
@@ -69,7 +70,7 @@ exports.postAddProduct = (req, res, next) => {
         const error = new Error(err);
         error.httpStatusCode = 500;
         return next(error);
-    });    
+    });
 };
 
 exports.getProducts = (req, res, next) => {
@@ -140,13 +141,13 @@ exports.postEditProduct = (req, res, next) => {
     if(!errors.isEmpty()) {
         console.log(errors.array());
         return res.status(422).render('admin/edit-product', {
-            docTitle: 'Edit Product', 
+            docTitle: 'Edit Product',
             path: '/admin/edit-product',
             editing: true,
             hasError: true,
             product: {
                 title: title,
-                price: price, 
+                price: price,
                 description: description,
                 _id: prodId,
             },

@@ -23,14 +23,16 @@ exports.getLogin = (req, res, next) => {
   } else if( signupSuccess.length > 0) {
       success = signupSuccess[0];
   } else if(updatedPasswordSuccess.length > 0){
-      success = updatedPasswordSuccess[0];  
+      success = updatedPasswordSuccess[0];
   }
   else {
       errorMessage = null;
       success = null;
   }
+
+  console.log('rendering login page');
   res.render('auth/login', {
-      docTitle: 'Login', 
+      docTitle: 'Login',
       path: '/login',
       errorMessage: errorMessage,
       successMessage: success,
@@ -63,11 +65,11 @@ exports.postLogin = (req, res, next) => {
     console.log(errors.array());
     if(!errors.isEmpty()) {
         return res.status(422).render('auth/login', {
-            docTitle: 'Login', 
+            docTitle: 'Login',
             path: '/login',
             errorMessage: errors.array()[0].msg,
-            oldInput: { email: email, password: password }      
-        }); 
+            oldInput: { email: email, password: password }
+        });
     }
     User.findOne({email: email})
         .then(user => {
@@ -238,9 +240,9 @@ exports.postNewPassword = (req, res, next) => {
     const passwordToken = req.body.passwordToken;
     let resetUser;
     User.findOne({
-        resetToken: passwordToken, 
+        resetToken: passwordToken,
         resetTokenExpiration: {$gt: Date.now()},
-        _id: userId 
+        _id: userId
     })
     .then(user => {
         resetUser = user;
